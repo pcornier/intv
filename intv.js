@@ -66,7 +66,7 @@ console.assert(a.mask == 0b111111)
 a.v = 10
 console.assert(a.toString() == '0b001010')
 
-// resize to 3 bit
+// resize
 a.size = 3
 console.assert(a == 2)
 console.assert(a.mask == 0b111)
@@ -83,7 +83,7 @@ console.assert(a == 0b11001111)
 a = intv([a, a], 10)
 console.assert(a == 0b1111001111)
 
-// bit indexing & slice
+// bit indexing & slicing
 console.assert(a(1) == 1)
 console.assert(a(4) == 0)
 console.assert(a(6, 3) == 0b1001)
