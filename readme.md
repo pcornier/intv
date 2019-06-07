@@ -30,7 +30,6 @@ let a = intv(10, 6)
 console.assert(a.toString() == '0b001010')
 ```
 
-
 Resizing
 ```javascript
 let a = intv(42)
@@ -45,7 +44,7 @@ a = intv([0b11, intv(0b11, 4), 0b11])
 console.assert(a == 0b11001111)
 ```
 
-Concatenate and resize
+Concatenation with fixed size
 ```javascript
 let a = intv(0b1111, 6)
 a = intv([a, a], 10)
