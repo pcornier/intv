@@ -1,4 +1,4 @@
-Intv (Int vector) is a small Javascript helper to deal with binary numbers. It is used to **simulate** electronic signals and therefore not optimized for performances.
+Intv (Int vector) is a small Javascript helper to deal with binary numbers. It is used to **simulate** electronic signals and therefore not optimized for performance.
 
 `intv intv(int value | array of values [, int size])`
 
