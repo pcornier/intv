@@ -4,7 +4,7 @@ const intv = function(initial, size) {
   if (Array.isArray(initial)) {
     let val = 0
     for (var i in initial) {
-      let s = initial[i].size || (Math.log(initial[i]) / Math.log(2) + 1) | 0
+      let s = initial[i].size || (Math.log(initial[i]) / Math.log(2) + 1) | 1
       val <<= s
       val |= initial[i]
     }
