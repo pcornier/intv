@@ -1,52 +1,52 @@
 
-const intv = function(initial, size) {
-
-  if (Array.isArray(initial)) {
-    let val = 0
-    for (var i in initial) {
-      let s = initial[i].size || (Math.log(initial[i]) / Math.log(2) + 1) | 1
-      val <<= s
-      val |= initial[i]
+export function intv(init, size) {
+  let val = [];
+  
+  const setv = function(vector, size) {
+    if (!Array.isArray(vector)) vector = [vector];
+    size = size || Infinity;
+    let sum = 0;
+    let bits = 0;
+    for (var i = 0; i < vector.length; i++) {
+      var n = vector[i].i || vector[i];
+      var s = vector[i].length || (Math.log(n) / Math.log(2) + 1) | 0;
+      for (var j = 0; j < s; j++) {
+        let b = (n >> j) & 1;
+        val.push(b);
+        sum |= b << i;
+        bits++;
+        if (bits >= size) break;
+      }
     }
-    initial = val
+    return sum;
   }
   
-  const v = function(i, j) {
-    if (j !== null && j < i) {
-      return intv((v.intv >> j) & ((1 << (i-j+1))-1))
-    }
-    else if (i != null) {
-      return (v.intv >> i) & 1
-    }
-  }
-
-  v.toString = function(base) {
-    if (base) {
-      return this.intv.toString(base)
-    }
-    return '0b' + ('0'.repeat(this.size) + this.intv.toString(2)).slice(-this.size)
-  }
-
-  v[Symbol.toPrimitive] = function() {
-    return this.intv & this.mask
-  }
-
-  Object.defineProperties(v, {
-    v: {
-      set: value => v.intv = value & v.mask,
-      get: _ => v.intv & v.mask
+  let sum = setv(init, size);
+  size = size || (Math.log(sum) / Math.log(2) + 1) | 0;
+  
+  let fn = new Function;
+  return new Proxy(fn, {
+    set: function(a, p, v) {
+      if (p == 'i') {
+        val.splice(0, size);
+        setv(v, size);
+      }
+      else val[p] = v;
+      return true;
     },
-    size: {
-      set: value => {
-        v._size = value
-        v.mask = (1 << value) - 1
-        v.intv &= v.mask
-      },
-      get: _ => v._size
+    get: function(a, p) {
+      if (p == 'i') {
+        let v = 0;
+        for (var i = 0; i < size; i++) {
+          v |= val[i] << i;
+        }
+        return v;
+      }
+      else if (p in val) return val[p];
+      else return val;
+    },
+    apply: function(a, me, arg) {
+      return intv(val.slice(arg[1], arg[0]+1));
     }
-  })
-
-  v.intv = initial || 0
-  v.size = size || (Math.log(initial) / Math.log(2) + 1) | 0
-  return v
+  });
 }
